@@ -10,7 +10,7 @@ RSpec.describe GamesController, type: :controller do
 
   context 'Anon' do
     # Аноним не может смотреть игру
-    it 'kicks from #show' do
+    it 'kick from #show' do
       # Вызываем экшен
       get :show, id: game_w_questions.id
       # Проверяем ответ
