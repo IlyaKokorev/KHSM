@@ -123,22 +123,33 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  context 'correct .answer_current_question!' do
+  describe '#answer_current_question' do
     let(:correct_answer_key) { game_w_questions.current_game_question.correct_answer_key }
 
-    it "return true if correct answer" do
-      expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq true
+    context 'when answer right' do
+      it "return true if correct answer" do
+        expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq true
+        expect(game_w_questions.status).to eq(:in_progress)
+        expect(game_w_questions.finished?).to eq false
+      end
     end
 
-    it "return true if last question is true" do
-      game_w_questions.current_level = Question::QUESTION_LEVELS.max
-      expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq true
+    context 'current level if last and answer right' do
+      it "return true if last question is right" do
+        game_w_questions.current_level = Question::QUESTION_LEVELS.max
+        expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq true
+        expect(game_w_questions.status).to eq(:won)
+        expect(game_w_questions.finished?).to eq true
+      end
     end
 
-    it "return false if time is out" do
-      game_w_questions.created_at = Game::TIME_LIMIT.ago
-      expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq false
-      expect(game_w_questions.status).to eq(:timeout)
+    context 'time out or game finished' do
+      it "return false" do
+        game_w_questions.created_at = Game::TIME_LIMIT.ago
+        expect(game_w_questions.answer_current_question!(correct_answer_key)).to eq false
+        expect(game_w_questions.status).to eq(:timeout)
+        expect(game_w_questions.finished?).to eq true
+      end
     end
   end
 end
