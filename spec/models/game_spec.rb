@@ -155,6 +155,7 @@ RSpec.describe Game, type: :model do
         end
       end
     end
+    
     context 'when answer wrong' do
       context 'and answer is not last' do
         it 'changes game status to fail and finishes game' do
