@@ -118,15 +118,13 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it '#show alien game' do
-      # создаем новую игру, юзер не прописан, будет создан фабрикой новый
       alien_game = FactoryBot.create(:game_with_questions)
 
-      # пробуем зайти на эту игру текущий залогиненным user
       get :show, id: alien_game.id
 
-      expect(response.status).not_to eq(200) # статус не 200 ОК
+      expect(response.status).not_to eq(200)
       expect(response).to redirect_to(root_path)
-      expect(flash[:alert]).to be # во flash должен быть прописана ошибка
+      expect(flash[:alert]).to be
     end
 
     it 'takes money' do
@@ -169,8 +167,9 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
 
       expect(game.finished?).to be true
+      expect(game.status). to eq(:fail)
       expect(response).to redirect_to(user_path)
-      expect(flash[:alert]).to be_truthy
+      expect(flash[:alert]).to be
     end
   end
 end
