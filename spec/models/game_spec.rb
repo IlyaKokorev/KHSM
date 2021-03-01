@@ -46,6 +46,8 @@ RSpec.describe Game, type: :model do
 
   # Тесты на основную игровую логику
   context 'game mechanics' do
+
+
     # Правильный ответ должен продолжать игру
     it 'answer correct continues game' do
       # Текущий уровень игры и статус
@@ -125,6 +127,7 @@ RSpec.describe Game, type: :model do
 
   describe '#answer_current_question' do
     let(:correct_answer_key) { game_w_questions.current_game_question.correct_answer_key }
+    let(:not_correct_answer_key) { %w[a b c d].sample { |element| element != correct_answer_key } }
 
     context 'when answer right' do
       context 'and current level is last' do
@@ -159,7 +162,7 @@ RSpec.describe Game, type: :model do
     context 'when answer wrong' do
       context 'and answer is not last' do
         it 'changes game status to fail and finishes game' do
-          expect(game_w_questions.answer_current_question!('c')).to be(false)
+          expect(game_w_questions.answer_current_question!(not_correct_answer_key)).to be(false)
           expect(game_w_questions.finished?).to be(true)
           expect(game_w_questions.status).to eq(:fail)
         end
