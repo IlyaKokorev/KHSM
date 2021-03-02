@@ -127,7 +127,7 @@ RSpec.describe Game, type: :model do
 
   describe '#answer_current_question' do
     let(:correct_answer_key) { game_w_questions.current_game_question.correct_answer_key }
-    let(:not_correct_answer_key) { %w[a b c d].sample { |element| element != correct_answer_key } }
+    let(:not_correct_answer_key) { %w[a b c d].shuffle.find { |element| element != correct_answer_key } }
 
     context 'when answer right' do
       context 'and current level is last' do
