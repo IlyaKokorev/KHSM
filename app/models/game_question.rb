@@ -11,17 +11,6 @@ class GameQuestion < ActiveRecord::Base
   # Игровой вопрос знает, из какого вопроса берется информация
   belongs_to :question
 
-  # Создаем в этой модели виртуальные геттеры text, level, значения которых
-  # автоматически берутся из связанной модели question.
-  #
-  # Таким обазом при вызове, например
-  #
-  # game_question.text
-  #
-  # получим то, что лежит в
-  #
-  # game_question.question.text
-  #
   delegate :text, :level, to: :question, allow_nil: true
 
   # Без игры и вопроса — игровой вопрос не имеет смысла

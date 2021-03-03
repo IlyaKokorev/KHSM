@@ -199,9 +199,9 @@ RSpec.describe GamesController, type: :controller do
 
       # Пишем запрос в контроллер с нужным типом (put — не создаёт новых сущностей, но что-то меняет)
       put :help, id: game_w_questions.id, help_type: :fifty_fifty
-
       game = assigns(:game)
 
+      # Проверяем, что игра не закончилась, что флажок установился, и подсказка записалась
       expect(game.finished?).to be_falsey
       expect(game.fifty_fifty_used).to be_truthy
       expect(game.current_game_question.help_hash[:fifty_fifty]).to be
