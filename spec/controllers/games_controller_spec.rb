@@ -77,7 +77,7 @@ RSpec.describe GamesController, type: :controller do
 
       # Проверяем состояние этой игры: она не закончена
       # Юзер должен быть именно тот, которого залогинили
-      expect(game.finished?).to be_falsey
+      expect(game.finished?).to be false
       expect(game.user).to eq(user)
       # Проверяем, есть ли редирект на страницу этой игры
       # И есть ли сообщение об этом
@@ -91,7 +91,7 @@ RSpec.describe GamesController, type: :controller do
       # Вытаскиваем из контроллера поле @game
       game = assigns(:game)
       # Игра не закончена
-      expect(game.finished?).to be_falsey
+      expect(game.finished?).to be false
       # Юзер именно тот, которого залогинили
       expect(game.user).to eq(user)
 
@@ -108,14 +108,14 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
 
       # Игра не закончена
-      expect(game.finished?).to be_falsey
+      expect(game.finished?).to be false
       # Уровень больше 0
       expect(game.current_level).to be > 0
 
       # Редирект на страницу игры
       expect(response).to redirect_to(game_path(game))
       # Флеш пустой
-      expect(flash.empty?).to be_truthy
+      expect(flash.empty?).to be true
     end
 
     it '#show alien game' do
@@ -134,7 +134,7 @@ RSpec.describe GamesController, type: :controller do
 
       put :take_money, id: game_w_questions.id
       game = assigns(:game)
-      expect(game.finished?).to be_truthy
+      expect(game.finished?).to be true
       expect(game.prize).to eq(200)
 
       # пользователь изменился в базе, надо в коде перезагрузить!
@@ -147,7 +147,7 @@ RSpec.describe GamesController, type: :controller do
 
     it 'try to create second game' do
       # убедились что есть игра в работе
-      expect(game_w_questions.finished?).to be_falsey
+      expect(game_w_questions.finished?).to be false
 
       # отправляем запрос на создание, убеждаемся что новых Game не создалось
       expect { post :create }.to change(Game, :count).by(0)
@@ -177,7 +177,7 @@ RSpec.describe GamesController, type: :controller do
       # Проверяем, что у текущего вопроса нет подсказок
       expect(game_w_questions.current_game_question.help_hash[:audience_help]).not_to be
       # И подсказка не использована
-      expect(game_w_questions.audience_help_used).to be_falsey
+      expect(game_w_questions.audience_help_used).to be false
 
       # Пишем запрос в контроллер с нужным типом (put — не создаёт новых сущностей, но что-то меняет)
       put :help, id: game_w_questions.id, help_type: :audience_help
@@ -185,7 +185,7 @@ RSpec.describe GamesController, type: :controller do
 
       # Проверяем, что игра не закончилась, что флажок установился, и подсказка записалась
       expect(game.finished?).to be_falsey
-      expect(game.audience_help_used).to be_truthy
+      expect(game.audience_help_used).to be true
       expect(game.current_game_question.help_hash[:audience_help]).to be
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
       expect(response).to redirect_to(game_path(game))
@@ -195,15 +195,15 @@ RSpec.describe GamesController, type: :controller do
       # Проверяем, что у текущего вопроса нет подсказок
       expect(game_w_questions.current_game_question.help_hash[:fifty_fifty]).not_to be
       # И подсказка не использована
-      expect(game_w_questions.fifty_fifty_used).to be_falsey
+      expect(game_w_questions.fifty_fifty_used).to be false
 
       # Пишем запрос в контроллер с нужным типом (put — не создаёт новых сущностей, но что-то меняет)
       put :help, id: game_w_questions.id, help_type: :fifty_fifty
       game = assigns(:game)
 
       # Проверяем, что игра не закончилась, что флажок установился, и подсказка записалась
-      expect(game.finished?).to be_falsey
-      expect(game.fifty_fifty_used).to be_truthy
+      expect(game.finished?).to be false
+      expect(game.fifty_fifty_used).to be true
       expect(game.current_game_question.help_hash[:fifty_fifty]).to be
       expect(game.current_game_question.help_hash[:fifty_fifty]).to include(game.current_game_question.correct_answer_key)
       expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq(2)
